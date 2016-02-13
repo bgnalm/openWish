@@ -21,4 +21,5 @@ def route_index():
     return str(os.listdir('.'))
 
 def main():
+    os.chdir('./openWish')
     print 'started at {0}'.format(time.asctime())
