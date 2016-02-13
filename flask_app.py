@@ -18,7 +18,7 @@ def route_index():
     os.chdir('..')
     return returned_data    
     """
-    return os.listdir('.')
+    return str(os.listdir('.'))
 
 def main():
     print 'started at {0}'.format(time.asctime())
