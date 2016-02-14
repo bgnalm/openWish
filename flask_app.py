@@ -18,7 +18,14 @@ def route_index():
     return returned_data    
 
 def main():
-    os.chdir('./openWish')
+    try:
+        os.chdir('./openWish')
+    except:
+        pass
+
+    app.run()  
     print 'started at {0}'.format(time.asctime())
 
-main()
+
+if __name__ == "__main__":
+    main()
