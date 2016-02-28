@@ -18,8 +18,8 @@ def route_index():
     os.chdir('..')
     return returned_data    
 
-@app.route("/addWish", methods['POST'])
-@app.route("/add_wish", methods['POST'])
+@app.route("/addWish", methods=['POST'])
+@app.route("/add_wish", methods=['POST'])
 def route_add_wish():
     return add_wish.main()
 
