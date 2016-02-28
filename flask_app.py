@@ -4,6 +4,7 @@ import time
 import os
 
 import index_page.index as index_page
+import add_wish.add_wish as add_wish
 
 
 app = Flask(__name__)
@@ -16,6 +17,11 @@ def route_index():
     returned_data = index_page.main()
     os.chdir('..')
     return returned_data    
+
+@app.route("/addWish", methods['POST'])
+@app.route("/add_wish", methods['POST'])
+def route_add_wish():
+    return add_wish.main()
 
 def main():
     try:
