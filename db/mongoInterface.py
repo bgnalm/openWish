@@ -19,10 +19,14 @@ class MongoInterface(DB.DBInterface):
 			{'$push': {'created_wishes':{'wish_id':wish_id}}}
 		)
 
-	def _add_read_wish_to_user(self, user_id, wish_id):
+	def _add_read_wish_to_user(self, user_id, wish_id, rating=None):
+		user_rating = 0
+		if rating is not None and type(rating) == int:
+			user_rating = rating
+
 		self._users.update(
 			{'_id':user_id},
-			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating'=0}}}
+			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating'=user_rating}}}
 		)
 
 	def __init__(self):

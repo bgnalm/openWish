@@ -1,6 +1,6 @@
 HTML_INDEX_PAGE = 'index.html'
 
-def main():
+def main(consts):
     try:
         html_file = open(HTML_INDEX_PAGE, 'r')
     except Exception ,e:
