@@ -26,7 +26,7 @@ class MongoInterface(DB.DBInterface):
 
 		self._users.update(
 			{'_id':user_id},
-			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating'=user_rating}}}
+			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating':user_rating}}}
 		)
 
 	def __init__(self):
@@ -51,17 +51,17 @@ class MongoInterface(DB.DBInterface):
 		reader_user_id=None,
 		add_to_read_wishes=None
 	):
-	"""
-	@note: this is not the best implmentation
-		the best implemantation is to add a randon 0 to 1 field to each
-		wish, and search for when some random is bigger than the random field
-		the current implemantation just returns the first possible value
-	"""
+		"""
+		@note: this is not the best implmentation
+			the best implemantation is to add a randon 0 to 1 field to each
+			wish, and search for when some random is bigger than the random field
+			the current implemantation just returns the first possible value
+		"""
 
 		read_wishes = self._get_all_read_wishes()
 		created_wishes = self._get_all_created_wishes()
 		excluded_wishes = read_wishes + created_wishes
-		wish = self._wishes.find({'_id':'$nin':excluded_wishes}).limit(1)
+		wish = self._wishes.find({'_id':{'$nin':excluded_wishes}}).limit(1)
 		if type(add_to_read_wishes) == bool and add_to_read_wishes:
 			self._add_read_wish_to_user(reader_user_id, wish._id)
 
