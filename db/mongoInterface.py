@@ -45,6 +45,14 @@ class MongoInterface(DB.DBInterface):
 		self._wishes = self._db['wishes']
 		self._users = self._db['users']
 
+	def next_read(self, name):
+		if not self._user_exists(name):
+			raise UserUnexistsError('User {0} does not exists'.format(name))
+
+		result = self._users.find({'name':name}).limit(1).next()
+		return result['next_read_timestamp']
+
+
 	def create_user(self, name):
 		if self._user_exists(name):
 			raise UserExistsError('User {0} already exists'.format(name))

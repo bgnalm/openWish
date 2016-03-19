@@ -6,6 +6,7 @@ import os
 import index_page.index as index_page
 import add_wish.add_wish as add_wish
 import create_user.create_user as create_user
+import time_left.time_left as time_left
 
 import consts
 import request_handler
@@ -63,6 +64,21 @@ def route_create_user():
         return load_static_page('create_user/create_user_usage.html')
 
     return create_user.main(db, json_request, consts)
+
+@app.route("/timeLeft", methods=['POST', 'GET'])
+@app.route("/time_left", methods=['POST' , 'GET'])
+def route_time_left():
+    json_request = None
+
+    try:
+        json_request = request_handler.handle_json_request(
+            request.data,
+            time_left.REQUIRED_FIELDS
+        )
+    except:
+        return load_static_page('create_user/time_left_usage.html')
+
+    return time_left.main(db, json_request, consts)
 
 def main():
     try:
