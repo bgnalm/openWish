@@ -62,8 +62,6 @@ def route_create_user():
     except:
         return load_static_page('create_user/create_user_usage.html')
 
-    print json_request
-
     return create_user.main(db, json_request, consts)
 
 def main():

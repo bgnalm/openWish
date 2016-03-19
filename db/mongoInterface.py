@@ -5,6 +5,9 @@ import time
 MONGO_URI = '10.20.109.89'
 DB_NAME = 'openWish'
 
+class UserExistsError(Exception):
+	pass
+
 class MongoInterface(DB.DBInterface):
 
 	def _get_all_created_wishes(self, user_id):
@@ -29,17 +32,29 @@ class MongoInterface(DB.DBInterface):
 			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating':user_rating}}}
 		)
 
+	def _user_exists(self, name):
+		result = self._users.find({'name':name}).limit(1)
+		if result.count() >= 1:
+			return True
+
+		return False
+
+
 	def __init__(self):
 		self._db = MongoClient(MONGO_URI)[DB_NAME]
 		self._wishes = self._db['wishes']
 		self._users = self._db['users']
 
 	def create_user(self, name):
+		if self._user_exists(name):
+			raise UserExistsError('User {0} already exists'.format(name))
+
 		insertion = {
 			'name' : name,
 			'created_wishes' : [],
 			'read_wishes' : [],
-			'last_read_timestamp ' : 0
+			'last_read_timestamp' : 0,
+			'next_read_timestamp' : 0
 		}
 
 		_id = self._users.insert(insertion)
