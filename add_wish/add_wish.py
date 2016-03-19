@@ -23,5 +23,5 @@ def main(db, request, consts):
 		optional=request.wish.optional
 	)
 
-	db.insert_wish(new_wish)
+	return db.insert_wish(new_wish)
 

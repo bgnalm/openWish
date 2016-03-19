@@ -34,6 +34,17 @@ class MongoInterface(DB.DBInterface):
 		self._wishes = self._db['wishes']
 		self._users = self._db['users']
 
+	def create_user(self, name):
+		insertion = {
+			'name' : name,
+			'created_wishes' : [],
+			'read_wishes' : [],
+			'last_read_timestamp ' : 0
+		}
+
+		_id = self._users.insert(insertion)
+		return _id
+
 
 	def insert_wish(self, wish):
 		insertion = {
@@ -45,6 +56,7 @@ class MongoInterface(DB.DBInterface):
 
 		_id = self._wishes.insert(insertion)
 		self._add_created_wish_to_user(wish._user_id, str(_id))
+		return _id
 
 	def get_random_wish(
 		self,

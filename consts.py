@@ -11,5 +11,3 @@ class Wish(object):
 		self._optional = optional
 		if type(optional) != dict and optional is not None:
 			raise Exception('Optional has to be a dict')
-
-REQUEST_JSON_PARSING_ERROR = "The sent request isn't in json format"
