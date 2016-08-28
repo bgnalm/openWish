@@ -48,7 +48,7 @@ def route_add_wish():
     except:
         return load_static_page('add_wish/add_wish_usage.html')
 
-    return add_wish.main(db, json_request, consts)
+    return request_handler.handle_response(add_wish.main(db, json_request, consts))
 
 @app.route("/createUser", methods=['POST', 'GET'])
 @app.route("/create_user", methods=['POST' , 'GET'])
@@ -63,7 +63,7 @@ def route_create_user():
     except:
         return load_static_page('create_user/create_user_usage.html')
 
-    return create_user.main(db, json_request, consts)
+    return request_handler.handle_response(create_user.main(db, json_request, consts))
 
 @app.route("/timeLeft", methods=['POST', 'GET'])
 @app.route("/time_left", methods=['POST' , 'GET'])
@@ -76,9 +76,9 @@ def route_time_left():
             time_left.REQUIRED_FIELDS
         )
     except:
-        return load_static_page('create_user/time_left_usage.html')
+        return load_static_page('time_left/time_left_usage.html')
 
-    return time_left.main(db, json_request, consts)
+    return request_handler.handle_response(time_left.main(db, json_request, consts))
 
 def main():
     try:

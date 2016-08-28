@@ -23,5 +23,19 @@ def main(db, request, consts):
 		optional=request.wish.optional
 	)
 
-	return db.insert_wish(new_wish)
+	try:
+		return {
+			'success' : True,
+			'data' : {
+				'wish_id' : db.insert_wish(new_wish)
+			}
+		}
+
+	except Exception, e:
+		return {
+			'success' : False,
+			'message' : e.message
+		}
+
+
 
