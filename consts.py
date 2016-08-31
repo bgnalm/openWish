@@ -1,9 +1,10 @@
+import time
 
 class Wish(object):
 
-	def __init__(self, text, user_id, time_added=None, optional=None):
+	def __init__(self, text, user_name, time_added=None, optional=None):
 		self._text = text
-		self._user_id = user_id
+		self._user_name = user_name
 		self._time_added = time_added
 		if time_added is None:
 			self._time_added = int(time.time())

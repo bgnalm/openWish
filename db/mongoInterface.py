@@ -8,6 +8,9 @@ DB_NAME = 'openWish'
 class UserExistsError(Exception):
 	pass
 
+class UserDoesNotExistsError(Exception):
+	pass
+
 class MongoInterface(DB.DBInterface):
 
 	def _get_all_created_wishes(self, user_id):
@@ -16,10 +19,10 @@ class MongoInterface(DB.DBInterface):
 	def _get_all_read_wishes(self, user_id):
 		return self._users.find({'_id':user_id}).read_wishes
 
-	def _add_created_wish_to_user(self, user_id, wish_id):
+	def _add_created_wish_to_user(self, user_name, wish_id):
 		self._users.update(
-			{'_id':user_id},
-			{'$push': {'created_wishes':{'wish_id':wish_id}}}
+			{'name':user_name},
+			{'$push': {'created_wishes':wish_id}, '$inc' : {'posts' : 1}}
 		)
 
 	def _add_read_wish_to_user(self, user_id, wish_id, rating=None):
@@ -29,7 +32,7 @@ class MongoInterface(DB.DBInterface):
 
 		self._users.update(
 			{'_id':user_id},
-			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating':user_rating}}}
+			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating':user_rating}}},
 		)
 
 	def _user_exists(self, name):
@@ -61,8 +64,10 @@ class MongoInterface(DB.DBInterface):
 			'name' : name,
 			'created_wishes' : [],
 			'read_wishes' : [],
-			'last_read_timestamp' : 0,
-			'next_read_timestamp' : 0
+			'last_post_timestamp' : 0,
+			'next_post_timestamp' : 0,
+			'posts' : 0,
+			'reads' : 0
 		}
 
 		_id = self._users.insert(insertion)
@@ -73,12 +78,15 @@ class MongoInterface(DB.DBInterface):
 		insertion = {
 			'time_added':wish._time_added, 
 			'text':wish._text, 
-			'user_id':wish._user_id,
+			'user_name' :wish._user_name,
 			'optional': wish._optional
 		}
 
+		if not self._user_exists(wish._user_name):
+			raise UserDoesNotExistsError('User {0} does not exists'.format(wish._user_name))
+
 		_id = self._wishes.insert(insertion)
-		self._add_created_wish_to_user(wish._user_id, str(_id))
+		self._add_created_wish_to_user(wish._user_name, str(_id))
 		return _id
 
 	def get_random_wish(
