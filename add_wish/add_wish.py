@@ -1,7 +1,11 @@
 import json
 import time
+import time_left.time_left
 
 REQUIRED_FIELDS = ['user_name', 'wish']
+
+class UserCantPostError(Exception):
+	pass
 
 def main(db, request, consts):
 	"""
@@ -24,6 +28,9 @@ def main(db, request, consts):
 	)
 
 	try:
+		if not time_left.time_left.can_user_post(db, request['user_name']):
+			raise UserCantPostError("User {0} cant post right now".format(request["user_name"]))
+
 		return {
 			'success' : True,
 			'data' : {

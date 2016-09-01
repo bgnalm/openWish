@@ -7,6 +7,7 @@ import index_page.index as index_page
 import add_wish.add_wish as add_wish
 import create_user.create_user as create_user
 import time_left.time_left as time_left
+import read_wish.read_wish as read_wish
 
 import consts
 import request_handler
@@ -49,6 +50,23 @@ def route_add_wish():
         return load_static_page('add_wish/add_wish_usage.html')
 
     return request_handler.handle_response(add_wish.main(db, json_request, consts))
+
+@app.route("/readWish", methods=['POST', 'GET'])
+@app.route("/read_wish", methods=['POST', 'GET'])
+@app.route("/readwish", methods=['POST', 'GET'])
+def route_read_wish():
+
+    json_request = None
+
+    try:
+        json_request = request_handler.handle_json_request(
+            request.data,
+            read_wish.REQUIRED_FIELDS
+        )
+    except:
+        return load_static_page('read_wish/read_wish_usage.html')
+
+    return request_handler.handle_response(read_wish.main(db, json_request, consts))
 
 @app.route("/createUser", methods=['POST', 'GET'])
 @app.route("/create_user", methods=['POST' , 'GET'])

@@ -2,10 +2,15 @@ import time
 
 class Wish(object):
 
-	def __init__(self, text, user_name, time_added=None, optional=None):
+	def __init__(self, text, user_name, read_by=[], number_of_reads=0,
+		rating=0, number_of_ratings=0, time_added=None, optional=None):
 		self._text = text
 		self._user_name = user_name
 		self._time_added = time_added
+		self._read_by = read_by
+		self._number_of_reads = number_of_reads
+		self._rating = rating
+		self._number_of_ratings = number_of_ratings
 		if time_added is None:
 			self._time_added = int(time.time())
 

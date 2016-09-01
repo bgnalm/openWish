@@ -4,6 +4,10 @@ REQUIRED_FIELDS = ['user_name']
 
 def can_user_post(db, user_name):
 	user = db.load_user(user_name)
+	return user._next_post_timestamp < time.time()
+
+def can_user_read(db, user_name):
+	user = db.load_user(user_name)
 	return user._posts > user._reads
 
 def main(db, request, consts):
@@ -12,7 +16,8 @@ def main(db, request, consts):
 		return {
 			'success' : True,
 			'data' : {
-				'can_read' :user._posts > user._reads,
+				'can_read' : user._posts > user._reads,
+				'can_post' : user._next_post_timestamp < time.time(),
 				'next_post' : time.ctime(user._next_post_timestamp)
 			}
 		}

@@ -26,13 +26,13 @@ class MongoInterface(DB.DBInterface):
 			{'$push': {'created_wishes':wish_id}, '$inc' : {'posts' : 1}}
 		)
 
-	def _add_read_wish_to_user(self, user_id, wish_id, rating=None):
+	def _add_read_wish_to_user(self, user_name, wish_id, rating=None):
 		user_rating = 0
 		if rating is not None and type(rating) == int:
 			user_rating = rating
 
 		self._users.update(
-			{'_id':user_id},
+			{'name':user_name},
 			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating':user_rating}}},
 		)
 
@@ -49,7 +49,7 @@ class MongoInterface(DB.DBInterface):
 		self._wishes = self._db['wishes']
 		self._users = self._db['users']
 
-	def load_user(self, user_name):
+	def load_user(self, user_name, user=None):
 		if not self._user_exists(user_name):
 			raise UserDoesNotExistsError('User {0} does not exist'.format(user_name))
 
@@ -62,6 +62,28 @@ class MongoInterface(DB.DBInterface):
 			result['reads'],
 			result['last_post_timestamp'],
 			result['next_post_timestamp']
+		)
+
+	def load_wish(self, wish_id, wish=None):
+		"""
+		wish_id: if you have the id of the wish
+		wish: if you have the result of a find
+		"""
+		if wish is None:
+			result = self._wishes.find({'_id':wish_id}).limit(1).next()
+		else:
+			result = wish
+
+		return consts.Wish(
+			result['text'],
+			result['user_name'],
+			result['read_by'],
+			result['number_of_reads'],
+			result['rating'],
+			result['number_of_ratings']
+			result['time_added'],
+			result['optional'],
+
 		)
 
 	def next_read(self, name):
@@ -94,7 +116,11 @@ class MongoInterface(DB.DBInterface):
 			'time_added':wish._time_added, 
 			'text':wish._text, 
 			'user_name' :wish._user_name,
-			'optional': wish._optional
+			'optional': wish._optional,
+			'read_by' : [],
+			'number_of_reads' : 0,
+			'rating' : 0,
+			'number_of_ratings' : 0
 		}
 
 		if not self._user_exists(wish._user_name):
@@ -106,7 +132,7 @@ class MongoInterface(DB.DBInterface):
 
 	def get_random_wish(
 		self,
-		reader_user_id=None,
+		reader_user_name=None,
 		add_to_read_wishes=None
 	):
 		"""
@@ -121,9 +147,9 @@ class MongoInterface(DB.DBInterface):
 		excluded_wishes = read_wishes + created_wishes
 		wish = self._wishes.find({'_id':{'$nin':excluded_wishes}}).limit(1)
 		if type(add_to_read_wishes) == bool and add_to_read_wishes:
-			self._add_read_wish_to_user(reader_user_id, wish._id)
+			self._add_read_wish_to_user(reader_user_name, wish._id)
 
-		return wish
+		return self.load_wish(wish)
 
 
 
