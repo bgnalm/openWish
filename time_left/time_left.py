@@ -1,25 +1,19 @@
 import time
 
-REQUIRED_FIELDS = ['user_id']
+REQUIRED_FIELDS = ['user_name']
 
-def can_user_post(db, user_id):
-	next_read = db.next_read(request['user_id'])
-	if next_read < int(time.time()):
-		return True
-
-	return False
-
+def can_user_post(db, user_name):
+	user = db.load_user(user_name)
+	return user._posts > user._reads
 
 def main(db, request, consts):
 	try:
-		next_read = db.next_read(request['user_id'])
-		seconds_left = next_read - int(time.time())
-
+		user = db.load_user(request['user_name'])
 		return {
 			'success' : True,
 			'data' : {
-				'can_post' : (seconds_left > 0),
-				'when_will_post' : time.ctime(next_read)
+				'can_read' :user._posts > user._reads,
+				'next_post' : time.ctime(user._next_post_timestamp)
 			}
 		}
 

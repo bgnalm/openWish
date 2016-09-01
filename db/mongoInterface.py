@@ -1,6 +1,7 @@
 import DB
 from pymongo import MongoClient
 import time
+import consts
 
 MONGO_URI = '10.20.109.89'
 DB_NAME = 'openWish'
@@ -48,10 +49,24 @@ class MongoInterface(DB.DBInterface):
 		self._wishes = self._db['wishes']
 		self._users = self._db['users']
 
-	
+	def load_user(self, user_name):
+		if not self._user_exists(user_name):
+			raise UserDoesNotExistsError('User {0} does not exist'.format(user_name))
+
+		result = self._users.find({'name':user_name}).limit(1).next()
+		return consts.User(
+			user_name,
+			result['created_wishes'],
+			result['read_wishes'],
+			result['posts'],
+			result['reads'],
+			result['last_post_timestamp'],
+			result['next_post_timestamp']
+		)
+
 	def next_read(self, name):
 		if not self._user_exists(name):
-			raise UserUnexistsError('User {0} does not exists'.format(name))
+			raise UserDoesNotExistsError('User {0} does not exist'.format(name))
 
 		result = self._users.find({'name':name}).limit(1).next()
 		return result['next_read_timestamp']
