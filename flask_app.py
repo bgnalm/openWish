@@ -14,7 +14,7 @@ import request_handler
 from db import mongoInterface
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 db = mongoInterface.MongoInterface()
 
 def load_static_page(path):
@@ -26,6 +26,22 @@ def load_static_page(path):
     html_text = html_file.read()
     html_file.close()
     return html_text
+
+def process_json_api_call(module, usage_page):
+    json_request = None
+
+    try:
+        json_request = request_handler.handle_json_request(
+            request.data,
+            module.REQUIRED_FIELDS
+        )
+    except request_handler.JsonRequestParsingError, e:
+        return load_static_page(usage_page)
+    except request_handler.NoRequiredFieldError, e:
+        message = 'error. missing "{0}" in request. read the documentation at {1}'.format(e._field, usage_page)
+        return request_handler.handle_response({'message': message, 'success':False})
+
+    return request_handler.handle_response(module.main(db, json_request, consts))
 
 @app.route("/test", methods=['POST', 'GET'])
 @app.route("/", methods=['POST', 'GET'])
@@ -39,64 +55,23 @@ def route_index():
 @app.route("/addWish", methods=['POST', 'GET'])
 @app.route("/add_wish", methods=['POST', 'GET'])
 def route_add_wish():
-    json_request = None
-
-    try:
-        json_request = request_handler.handle_json_request(
-            request.data,
-            add_wish.REQUIRED_FIELDS
-        )
-    except:
-        return load_static_page('add_wish/add_wish_usage.html')
-
-    return request_handler.handle_response(add_wish.main(db, json_request, consts))
+    return process_json_api_call(add_wish, 'static/documentation/add_wish_usage.html')
 
 @app.route("/readWish", methods=['POST', 'GET'])
 @app.route("/read_wish", methods=['POST', 'GET'])
 @app.route("/readwish", methods=['POST', 'GET'])
 def route_read_wish():
-
-    json_request = None
-
-    try:
-        json_request = request_handler.handle_json_request(
-            request.data,
-            read_wish.REQUIRED_FIELDS
-        )
-    except:
-        return load_static_page('read_wish/read_wish_usage.html')
-
-    return request_handler.handle_response(read_wish.main(db, json_request, consts))
+    return process_json_api_call(read_wish, 'static/documentation/read_wish_usage.html')
 
 @app.route("/createUser", methods=['POST', 'GET'])
 @app.route("/create_user", methods=['POST' , 'GET'])
 def route_create_user():
-    json_request = None
-
-    try:
-        json_request = request_handler.handle_json_request(
-            request.data,
-            create_user.REQUIRED_FIELDS
-        )
-    except:
-        return load_static_page('create_user/create_user_usage.html')
-
-    return request_handler.handle_response(create_user.main(db, json_request, consts))
+    return process_json_api_call(create_user, 'static/documentation/create_user_usage.html')
 
 @app.route("/timeLeft", methods=['POST', 'GET'])
 @app.route("/time_left", methods=['POST' , 'GET'])
 def route_time_left():
-    json_request = None
-
-    try:
-        json_request = request_handler.handle_json_request(
-            request.data,
-            time_left.REQUIRED_FIELDS
-        )
-    except:
-        return load_static_page('time_left/time_left_usage.html')
-
-    return request_handler.handle_response(time_left.main(db, json_request, consts))
+    return process_json_api_call(time_left, 'static/documentation/time_left_usage.html')
 
 def main():
     try:

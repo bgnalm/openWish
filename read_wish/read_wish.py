@@ -10,8 +10,8 @@ def main(db, requests, consts):
 				'time_added' : wish.time_added,
 				'user_name' : wish.user_name,
 				'rating' : wish.rating,
-				'number_of_reads' : wish.number_of_reads
-				'optinal' : wish.optinal
+				'number_of_reads' : wish.number_of_reads,
+				'optinal' : wish.optional
 			}
 		}
 

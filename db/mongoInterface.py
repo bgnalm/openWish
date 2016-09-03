@@ -80,7 +80,7 @@ class MongoInterface(DB.DBInterface):
 			result['read_by'],
 			result['number_of_reads'],
 			result['rating'],
-			result['number_of_ratings']
+			result['number_of_ratings'],
 			result['time_added'],
 			result['optional'],
 
