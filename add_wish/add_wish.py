@@ -1,6 +1,7 @@
 import json
 import time
 import time_left.time_left
+import traceback
 
 REQUIRED_FIELDS = ['user_name', 'wish']
 
@@ -18,11 +19,11 @@ def main(db, request, consts):
 				"city" : "rehovot",
 			}
 		}
-	}
+	}\
 	"""
 
 	new_wish = consts.Wish(
-		request['wish']['text'], 
+		request['wish']['text'],
 		request['user_name'],
 		optional=request['wish']['optional']
 	)
@@ -41,7 +42,7 @@ def main(db, request, consts):
 	except Exception, e:
 		return {
 			'success' : False,
-			'message' : e.message
+			'message' : traceback.format_exc()
 		}
 
 

@@ -1,5 +1,6 @@
 import DB
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 import time
 import consts
 
@@ -25,6 +26,50 @@ class MongoInterface(DB.DBInterface):
 			{'name':user_name},
 			{'$push': {'created_wishes':wish_id}, '$inc' : {'posts' : 1}}
 		)
+
+	def _map(self, value, start1, stop1, start2, stop2):
+		distance = value - start1
+		part = distance / float(stop1 - start1)
+		return (stop2 - start2) * part + start2
+
+	def _map_rating_to_next_post(self, average_rating):
+		r = 5 - average_rating
+		time_to_wait = self._map(
+			average_rating, 
+			1, 
+			5, 
+			consts.MINIIMUM_NEXT_POST_TIME,
+			consts.MAXIMUM_NEXT_POST_TIME
+		)
+		
+		return time.time() + time_to_wait
+
+	def _calculate_user_next_post_time(self, user_name):
+		created_wishes = self._users.find({'name':user_name}).limit(1).next()['created_wishes']
+		total_ratings = 0
+		total_number_of_ratings = 0
+		for wish_id in created_wishes:
+			current_wish = self._wishes.find({'_id':ObjectId(wish_id)}).limit(1).next()
+			total_ratings += current_wish['rating']
+			total_number_of_ratings+= current_wish['number_of_ratings']
+
+		if total_number_of_ratings == 0:
+			return time.time() + consts.MAXIMUM_NEXT_POST_TIME
+		else:
+			total_average = total_ratings/float(total_number_of_ratings)
+			return self._map_rating_to_next_post(total_average)
+
+	def _update_user_post_data(self, user_name, post_time):
+		next_post_time = self._calculate_user_next_post_time(user_name)
+		self._users.update(
+			{'name' : user_name},
+			{
+				'$set' : {'last_post_timestamp' : post_time},
+				'$set' : {'next_post_timestamp' : next_post_time}
+			}
+		)
+
+
 
 	def _add_read_wish_to_user(self, user_name, wish_id, rating=None):
 		user_rating = 0
@@ -128,6 +173,7 @@ class MongoInterface(DB.DBInterface):
 
 		_id = self._wishes.insert(insertion)
 		self._add_created_wish_to_user(wish._user_name, str(_id))
+		self._update_user_post_data(wish._user_name, wish._time_added)
 		return _id
 
 	def get_random_wish(

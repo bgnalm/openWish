@@ -1,3 +1,4 @@
+import traceback
 import time
 
 REQUIRED_FIELDS = ['user_name']
@@ -15,5 +16,5 @@ def main(db, request, consts):
 	except Exception, e:
 		return {
 			'success' : False,
-			'message' : e.message
+			'message' : traceback.format_exc()
 		}

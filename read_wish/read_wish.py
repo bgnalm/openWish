@@ -1,3 +1,5 @@
+import traceback
+
 REQUIRED_FIELDS = ['user_name']
 
 def main(db, requests, consts):
@@ -18,6 +20,6 @@ def main(db, requests, consts):
 	except Exception, e:
 		return {
 			'success' : False,
-			'message' : e.message
+			'message' : traceback.format_exc()
 		}
 		
