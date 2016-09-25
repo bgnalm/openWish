@@ -25,7 +25,7 @@ def main(db, request, consts):
 
 	except Exception, e:
 		message = e.message
-		if consts.FULL_TRACEBACK_MESSAGAE:
+		if consts.FULL_TRACEBACK_MESSAGE:
 			message = traceback.format_exc()
 		return {
 			'success' : False,

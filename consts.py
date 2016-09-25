@@ -2,8 +2,10 @@ import time
 
 MINIMUM_MEXT_POST_TIME = 600 # 10 minutes
 MAXIMUM_NEXT_POST_TIME = 3600 * 24 # 24 hours
+ZERO_NEXT_POST_TIME = True # always allow to post, for debugging purposes
 
 FULL_TRACEBACK_MESSAGE = True # should return full traceback in error messages
+
 
 class Wish(object):
 

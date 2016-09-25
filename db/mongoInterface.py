@@ -15,12 +15,6 @@ class UserDoesNotExistsError(Exception):
 
 class MongoInterface(DB.DBInterface):
 
-	def _get_all_created_wishes(self, user_id):
-		return self._users.find({'_id':user_id}).created_wishes
-
-	def _get_all_read_wishes(self, user_id):
-		return self._users.find({'_id':user_id}).read_wishes
-
 	def _add_created_wish_to_user(self, user_name, wish_id):
 		self._users.update(
 			{'name':user_name},
@@ -41,15 +35,18 @@ class MongoInterface(DB.DBInterface):
 			consts.MINIIMUM_NEXT_POST_TIME,
 			consts.MAXIMUM_NEXT_POST_TIME
 		)
-		
+
 		return time.time() + time_to_wait
 
 	def _calculate_user_next_post_time(self, user_name):
+		if consts.ZERO_NEXT_POST_TIME:
+			return 0
+
 		created_wishes = self._users.find({'name':user_name}).limit(1).next()['created_wishes']
 		total_ratings = 0
 		total_number_of_ratings = 0
 		for wish_id in created_wishes:
-			current_wish = self._wishes.find({'_id':ObjectId(wish_id)}).limit(1).next()
+			current_wish = self._wishes.find({'_id':wish_id}).limit(1).next()
 			total_ratings += current_wish['rating']
 			total_number_of_ratings+= current_wish['number_of_ratings']
 
@@ -64,12 +61,12 @@ class MongoInterface(DB.DBInterface):
 		self._users.update(
 			{'name' : user_name},
 			{
-				'$set' : {'last_post_timestamp' : post_time},
-				'$set' : {'next_post_timestamp' : next_post_time}
+				'$set' : {
+					'last_post_timestamp' : post_time,
+					'next_post_timestamp' : int(next_post_time)
+				}
 			}
 		)
-
-
 
 	def _add_read_wish_to_user(self, user_name, wish_id, rating=None):
 		user_rating = 0
@@ -172,14 +169,14 @@ class MongoInterface(DB.DBInterface):
 			raise UserDoesNotExistsError('User {0} does not exists'.format(wish._user_name))
 
 		_id = self._wishes.insert(insertion)
-		self._add_created_wish_to_user(wish._user_name, str(_id))
+		self._add_created_wish_to_user(wish._user_name, _id)
 		self._update_user_post_data(wish._user_name, wish._time_added)
 		return _id
 
 	def get_random_wish(
 		self,
-		reader_user_name=None,
-		add_to_read_wishes=None
+		reader_user_name,
+		add_to_read_wishes
 	):
 		"""
 		@note: this is not the best implmentation
@@ -188,12 +185,13 @@ class MongoInterface(DB.DBInterface):
 			the current implemantation just returns the first possible value
 		"""
 
-		read_wishes = self._get_all_read_wishes()
-		created_wishes = self._get_all_created_wishes()
+		read_wishes = self._users.find({'name':reader_user_name}).limit(1).next()['read_wishes']
+		created_wishes = self._users.find({'name':reader_user_name}).limit(1).next()['created_wishes']
 		excluded_wishes = read_wishes + created_wishes
-		wish = self._wishes.find({'_id':{'$nin':excluded_wishes}}).limit(1)
-		if type(add_to_read_wishes) == bool and add_to_read_wishes:
-			self._add_read_wish_to_user(reader_user_name, wish._id)
+		excluded_wishes_id = [ObjectId(wish) for wish in excluded_wishes]
+		wish = self._wishes.find({'_id':{'$nin':excluded_wishes_id}}).limit(1).next()
+		if add_to_read_wishes:
+			self._add_read_wish_to_user(reader_user_name, wish['_id'])
 
 		return self.load_wish(wish)
 
