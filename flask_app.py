@@ -13,7 +13,6 @@ import consts
 import request_handler
 from db import mongoInterface
 
-
 app = Flask(__name__, static_folder='static')
 db = mongoInterface.MongoInterface()
 
