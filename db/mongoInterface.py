@@ -27,11 +27,11 @@ class MongoInterface(DB.DBInterface):
 		return (stop2 - start2) * part + start2
 
 	def _map_rating_to_next_post(self, average_rating):
-		r = 5 - average_rating
+		r = consts.MAXIMUM_RATING - average_rating
 		time_to_wait = self._map(
 			average_rating, 
-			1, 
-			5, 
+			consts.MINIMUM_RATING, 
+			consts.MAXIMUM_RATING, 
 			consts.MINIIMUM_NEXT_POST_TIME,
 			consts.MAXIMUM_NEXT_POST_TIME
 		)
@@ -74,7 +74,10 @@ class MongoInterface(DB.DBInterface):
 		
 		self._users.update(
 			{'name':user_name},
-			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating':consts.USER_DIDNT_RATE_YET}}},
+			{
+				'$push': {'read_wishes':{'wish_id':wish_id, 'rating':consts.USER_DIDNT_RATE_YET}},
+				'$inc' : {'reads' : 1}	
+			},
 		)
 
 		self._wishes.update(
