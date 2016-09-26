@@ -1,5 +1,8 @@
 import time
 
+MINIMUM_RATING = 1
+USER_DIDNT_RATE_YET = -1
+
 MINIMUM_MEXT_POST_TIME = 600 # 10 minutes
 MAXIMUM_NEXT_POST_TIME = 3600 * 24 # 24 hours
 ZERO_NEXT_POST_TIME = True # always allow to post, for debugging purposes
@@ -24,6 +27,12 @@ class Wish(object):
 		self._optional = optional
 		if type(optional) != dict and optional is not None:
 			raise Exception('Optional has to be a dict')
+
+	def get_rating(self):
+		if self._number_of_ratings == 0:
+			return MINIMUM_RATING
+
+		return self._rating / self._number_of_ratings
 
 class User(object):
 

@@ -8,12 +8,12 @@ def main(db, request, consts):
 		return {
 			'success' : True,
 			'data' : {
-				'text' : wish.text,
-				'time_added' : wish.time_added,
-				'user_name' : wish.user_name,
-				'rating' : wish.rating/float(wish.number_of_ratings),
-				'number_of_reads' : wish.number_of_reads,
-				'optinal' : wish.optional
+				'text' : wish._text,
+				'time_added' : wish._time_added,
+				'user_name' : wish._user_name,
+				'rating' : wish.get_rating(),
+				'number_of_reads' : wish._number_of_reads,
+				'optinal' : wish._optional
 			}
 		}
 

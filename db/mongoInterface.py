@@ -68,14 +68,18 @@ class MongoInterface(DB.DBInterface):
 			}
 		)
 
-	def _add_read_wish_to_user(self, user_name, wish_id, rating=None):
-		user_rating = 0
-		if rating is not None and type(rating) == int:
-			user_rating = rating
-
+	def _add_read_wish_to_user(self, user_name, wish_id):
+		print user_name
+		print wish_id
+		
 		self._users.update(
 			{'name':user_name},
-			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating':user_rating}}},
+			{'$push': {'read_wishes':{'wish_id':wish_id, 'rating':consts.USER_DIDNT_RATE_YET}}},
+		)
+
+		self._wishes.update(
+			{'_id' : wish_id},
+			{'$push' : {'read_by' : user_name}}
 		)
 
 	def _user_exists(self, name):
@@ -191,9 +195,9 @@ class MongoInterface(DB.DBInterface):
 		excluded_wishes_id = [ObjectId(wish) for wish in excluded_wishes]
 		wish = self._wishes.find({'_id':{'$nin':excluded_wishes_id}}).limit(1).next()
 		if add_to_read_wishes:
-			self._add_read_wish_to_user(reader_user_name, wish['_id'])
+			self._add_read_wish_to_user(reader_user_name, ObjectId(wish['_id']))
 
-		return self.load_wish(wish)
+		return self.load_wish(wish_id='', wish=wish)
 
 
 
