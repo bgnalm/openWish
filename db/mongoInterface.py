@@ -98,7 +98,7 @@ class MongoInterface(DB.DBInterface):
 		self._wishes = self._db['wishes']
 		self._users = self._db['users']
 
-	def load_user(self, user_name, user=None):
+	def load_user(self, user_name):
 		if not self._user_exists(user_name):
 			raise UserDoesNotExistsError('User {0} does not exist'.format(user_name))
 

@@ -8,6 +8,7 @@ import add_wish.add_wish as add_wish
 import create_user.create_user as create_user
 import time_left.time_left as time_left
 import read_wish.read_wish as read_wish
+import get_wishes.get_wishes as get_wishes
 
 import consts
 import request_handler
@@ -71,6 +72,11 @@ def route_create_user():
 @app.route("/time_left", methods=['POST' , 'GET'])
 def route_time_left():
     return process_json_api_call(time_left, 'static/documentation/time_left_usage.html')
+
+@app.route("/getWishes", methods=['POST', 'GET'])
+@app.route("/get_wishes", methods=['POST', 'GET'])
+def route_get_wishes():
+    return process_json_api_call(get_wishes, '')
 
 def main():
     try:
