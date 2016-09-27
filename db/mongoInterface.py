@@ -119,7 +119,7 @@ class MongoInterface(DB.DBInterface):
 		wish: if you have the result of a find
 		"""
 		if wish is None:
-			result = self._wishes.find({'_id':wish_id}).limit(1).next()
+			result = self._wishes.find({'_id': ObjectId(wish_id)}).limit(1).next()
 		else:
 			result = wish
 
