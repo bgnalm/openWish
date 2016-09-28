@@ -10,6 +10,7 @@ import time_left.time_left as time_left
 import read_wish.read_wish as read_wish
 import get_wishes.get_wishes as get_wishes
 import get_wish.get_wish as get_wish
+import rate_wish.rate_wish as rate_wish
 
 import consts
 import request_handler
@@ -83,6 +84,11 @@ def route_get_wishes():
 @app.route("/get_wish", methods=['POST', 'GET'])
 def route_get_wish():
     return process_json_api_call(get_wish, '')
+
+@app.route("/rateWish", methods=['POST', 'GET'])
+@app.route("/rate_wish", methods=['POST', 'GET'])
+def route_rate_wish():
+    return process_json_api_call(rate_wish, '')
 
 def main():
     try:

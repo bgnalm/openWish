@@ -13,6 +13,9 @@ class UserExistsError(Exception):
 class UserDoesNotExistsError(Exception):
 	pass
 
+class UserCantRateWish(Exception):
+	pass
+
 class MongoInterface(DB.DBInterface):
 
 	def _add_created_wish_to_user(self, user_name, wish_id):
@@ -201,6 +204,40 @@ class MongoInterface(DB.DBInterface):
 			self._add_read_wish_to_user(reader_user_name, ObjectId(wish['_id']))
 
 		return self.load_wish(wish_id='', wish=wish)
+
+	def user_rate_wish(self, user_name, wish_id, rating):
+		wish_object = ObjectId(wish_id)
+		result = self._users.find({
+			'$and' : [
+				{'name' : user_name},
+				{'read_wishes' : {'$elemMatch' :{'wish_id':wish_object}}}
+			]
+		})
+
+		if result.count() == 0:
+			raise UserCantRateWish('user {0} cant rate wish {1]'.format(user_name, wish_id))
+
+		initial_rating = 0
+		for read_wish in result.next()['read_wishes']:
+			if read_wish['wish_id'] == wish_object:
+				initial_rating = read_wish['rating']
+
+		self._users.update({'name' : user_name, 'read_wishes.wish_id': wish_object}, {'$set' :{'read_wishes.$.rating' : rating}})
+		if initial_rating == consts.USER_DIDNT_RATE_YET:
+			self._wishes.update(
+				{'_id' : wish_object},
+				{
+				 '$inc' : {'rating' : rating, 'number_of_ratings' : 1},	
+				}
+			)
+
+		else:
+			self._wishes.update(
+				{'_id' : wish_object},
+				{
+				 '$inc' : {'rating' : rating-initial_rating},	
+				}
+			)
 
 
 
