@@ -17,7 +17,7 @@ def main(db, request, consts):
 
 		if not wish_found:
 			for wish in user._created_wishes:
-				if str(wish['wish_id']) == request['wish_id']:
+				if str(wish) == request['wish_id']:
 					wish_found = True
 					break
 
