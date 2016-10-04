@@ -8,6 +8,8 @@ import sys
 SERVER_ADDRESS = 'http://127.0.0.1:5000'
 HEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
+USERS = 3
+
 class TestBasicCases(unittest.TestCase):
 
 	def __init__(self, *args, **kwargs):
@@ -85,9 +87,12 @@ class TestBasicCases(unittest.TestCase):
 		self.assertFalse(self.create_new_user(user_name))
 
 	def test_create_and_post(self):
+		'''
+		tests that a user can post
+		'''
 		user_name = 'test_create_and_post_'+self.generate_user_name()
 		self.assertTrue(self.create_new_user(user_name))
-		self.assertTrue(self.add_wish(user_name, 'i wish this test will pass', {'metadata': 'really meta'}))
+		self.assertTrue(self.add_wish(user_name, 'a wish by {0}'.format(user_name), {'metadata': 'really meta'}))
 
 	def test_add_and_read_wish(self):
 		user_name1 = 'test_add_and_read_wish1'+self.generate_user_name()
@@ -96,6 +101,11 @@ class TestBasicCases(unittest.TestCase):
 		self.create_new_user(user_name2)
 		self.assertTrue(self.add_wish(user_name1, 'i wish this test will pass', {'metadata': 'really meta'}))
 		self.assertTrue(self.read_wish(user_name2))
+
+	def test_rate_wish(self):
+		user_name1 = 'test_add_and_read_wish1'+self.generate_user_name()
+		user_name2 = 'test_add_and_read_wish2'+self.generate_user_name()
+
 
 if __name__ == '__main__':
 	unittest.main()
