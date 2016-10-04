@@ -1,0 +1,6 @@
+Tue Oct 04 05:37:27 2016: __main__.CreateUserTests.test_create_duplicate_users: creating user test_create_duplicate_user_1475548647.81
+Tue Oct 04 05:37:27 2016: __main__.CreateUserTests.test_create_duplicate_users: received: {u'message': u'success', u'data': {u'user_id': u'57f315e779eae00bf4927816'}, u'success': True}
+Tue Oct 04 05:37:27 2016: __main__.CreateUserTests.test_create_duplicate_users: creating duplicate user test_create_duplicate_user_1475548647.81
+Tue Oct 04 05:37:27 2016: __main__.CreateUserTests.test_create_duplicate_users: received {u'message': u'Traceback (most recent call last):\n  File "C:\\Users\\Michael\\Desktop\\Projects\\openWish\\create_user\\create_user.py", line 12, in main\n    \'user_id\' : str(db.create_user(request[\'user_name\']))\n  File "C:\\Users\\Michael\\Desktop\\Projects\\openWish\\db\\mongoInterface.py", line 150, in create_user\n    raise UserExistsError(\'User {0} already exists\'.format(name))\nUserExistsError: User test_create_duplicate_user_1475548647.81 already exists\n', u'success': False}
+Tue Oct 04 05:37:27 2016: __main__.CreateUserTests.test_create_user: creating user test_create_user_1475548647.9
+Tue Oct 04 05:37:27 2016: __main__.CreateUserTests.test_create_user: received: {u'message': u'success', u'data': {u'user_id': u'57f315e779eae00bf4927817'}, u'success': True}
