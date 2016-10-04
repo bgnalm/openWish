@@ -1,25 +1,23 @@
+import os.path, sys
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
+
 from open_wish_api import *
 import unittest
 import requests
 
 class GeneralTests(unittest.TestCase):
 
-	def __init__(self, *args, **kwargs):
-		super(GeneralTests, self).__init__(*args, **kwargs)
-		self._verbose = False
-		for arg in sys.argv: 
-			if arg == '-v':
-				self._verbose = True
+	def debug(self, s):
+		debug_print('{0}: {1}'.format(self.id(), s))
 
 	def test_send_invalid_json(self):
 		url = SERVER_ADDRESS + '/add_wish'
-		if self._verbose:
-			debug_print('test_send_invalid_json: sending invalid json request')
-
-		r = request.post(url, data='asdbbbsdfg', headers=HEADERS)
-		if self._verbose:
-			debug_print('test_send_invalid_json: received \n'+str(r.json()))
-
+		self.debug('test_send_invalid_json: sending invalid json request')
+		r = requests.post(url, data='asdbbbsdfg', headers=HEADERS)
+		self.debug('test_send_invalid_json: received \n'+str(r.raw.read(10)))
 		self.assertFalse(r.json()['success'])
+
+if __name__ == '__main__':
+	unittest.main()
 
 
