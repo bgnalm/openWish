@@ -54,7 +54,7 @@ class GetWishesTests(unittest.TestCase):
 		self.assertTrue(response['success'])
 
 		self.debug('getting wishes for user {0}'.format(user_name1))
-		response = add_wish(user_name1, 'wish text...', {'location':'Rehovot'})
+		response = get_wishes(user_name1)
 		self.debug('received {0}'.format(response))
 		self.assertTrue(response['success'])
 		self.assertTrue(len(response['data']['created_wishes'])==1)

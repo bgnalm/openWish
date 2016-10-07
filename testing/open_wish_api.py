@@ -52,7 +52,27 @@ def read_wish(username):
 	}
 
 	r = requests.post(url, data=json.dumps(data), headers=HEADERS)
-	return r.json()['success']
+	return r.json()
+
+def get_wishes(username):
+	url = SERVER_ADDRESS + '/get_wishes'
+	data = {
+		'user_name' : username
+	}
+
+	r = requests.post(url, data=json.dumps(data), headers=HEADERS)
+	return r.json()
+
+def get_wish(username, wish_id):
+	url = SERVER_ADDRESS + '/get_wish'
+	data = {
+		'user_name' : username,
+		'wish_id' : wish_id
+	}
+
+	r = requests.post(url, data=json.dumps(data), headers=HEADERS)
+	return r.json()
+
 
 def debug_print(s):
 	message = time.ctime() + ': ' + s

@@ -13,9 +13,10 @@ FULL_TRACEBACK_MESSAGE = True # should return full traceback in error messages
 
 class Wish(object):
 
-	def __init__(self, text, user_name, read_by=[], number_of_reads=0,
+	def __init__(self, text, user_name, wish_id='', read_by=[], number_of_reads=0,
 		rating=0, number_of_ratings=0, time_added=None, optional=None):
 		self._text = text
+		self._wish_id = wish_id
 		self._user_name = user_name
 		self._time_added = time_added
 		self._read_by = read_by
@@ -34,6 +35,16 @@ class Wish(object):
 			return MINIMUM_RATING
 
 		return self._rating / self._number_of_ratings
+
+	def get_public_wish(self):
+		return {
+			'text' : self._text,
+			'wish_id' : self._wish_id,
+			'time_added' : self._time_added,
+			'rating' : self.get_rating(),
+			'number_of_reads' : self._number_of_reads,
+			'optional' : self._optional
+		}
 
 class User(object):
 

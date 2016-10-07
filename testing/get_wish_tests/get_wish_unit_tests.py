@@ -54,7 +54,7 @@ class GetWishTests(unittest.TestCase):
 
 		self.debug('getting wish')
 		response = get_wish(user_name1, response['data']['wish_id'])
-		self.debug('received{0}'.format(response))
+		self.debug('received {0}'.format(response))
 		self.assertTrue(response['success'])
 
 	def test_get_unread_wish(self):

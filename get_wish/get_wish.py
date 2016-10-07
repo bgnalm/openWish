@@ -27,14 +27,7 @@ def main(db, request, consts):
 		wish = db.load_wish(request['wish_id'])
 		return {
 			'success' : True,
-			'data' : {
-				'text' : wish._text,
-				'time_added' : wish._time_added,
-				'user_name' : wish._user_name,
-				'rating' : wish.get_rating(),
-				'number_of_reads' : wish._number_of_reads,
-				'optional': wish._optional
-			}
+			'data' : wish.get_public_wish()	
 		}
 
 	except Exception, e:
