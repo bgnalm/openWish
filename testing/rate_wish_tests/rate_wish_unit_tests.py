@@ -110,7 +110,7 @@ class RateWishTests(unittest.TestCase):
 		self.assertTrue(response['success'])
 
 		self.debug('rating wish')
-		response = rate_wish(user_name2, response['data']['wish_id'], VALID_RATING)
+		response = rate_wish(user_name1, response['data']['wish_id'], VALID_RATING)
 		self.debug('received {0}'.format(response))
 		self.assertFalse(response['success'])
 

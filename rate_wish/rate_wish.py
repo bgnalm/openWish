@@ -2,10 +2,10 @@ import traceback
 
 REQUIRED_FIELDS = ['user_name', 'wish_id', 'rating']
 
-def InvalidRatingError(Exception):
+class InvalidRatingError(Exception):
 	pass
 
-def UserDidNotReadWishError(Exception):
+class UserDidNotReadWishError(Exception):
 	pass
 
 def main(db, request, consts):

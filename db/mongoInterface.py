@@ -116,26 +116,24 @@ class MongoInterface(DB.DBInterface):
 			result['next_post_timestamp']
 		)
 
-	def load_wish(self, wish_id, wish=None):
+	def load_wish(self, wish_id):
 		"""
 		wish_id: if you have the id of the wish
 		wish: if you have the result of a find
 		"""
-		if wish is None:
-			result = self._wishes.find({'_id': ObjectId(wish_id)}).limit(1).next()
-		else:
-			result = wish
+
+		result = self._wishes.find({'_id': ObjectId(wish_id)}).limit(1).next()
 
 		return consts.Wish(
 			result['text'],
 			result['user_name'],
+			wish_id,
 			result['read_by'],
 			result['number_of_reads'],
 			result['rating'],
 			result['number_of_ratings'],
 			result['time_added'],
 			result['optional'],
-
 		)
 
 	def next_read(self, name):
@@ -203,7 +201,7 @@ class MongoInterface(DB.DBInterface):
 		if add_to_read_wishes:
 			self._add_read_wish_to_user(reader_user_name, ObjectId(wish['_id']))
 
-		return self.load_wish(wish_id='', wish=wish)
+		return self.load_wish(wish['_id'])
 
 	def user_rate_wish(self, user_name, wish_id, rating):
 		wish_object = ObjectId(wish_id)

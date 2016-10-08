@@ -77,7 +77,7 @@ class GetWishTests(unittest.TestCase):
 		self.assertTrue(response['success'])
 
 		self.debug('getting wish')
-		response = get_wish(user_name2, response['data']['wish_id'])
+		response = get_wish(user_name1, response['data']['wish_id'])
 		self.debug('received{0}'.format(response))
 		self.assertTrue(response['success'])
 

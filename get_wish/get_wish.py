@@ -2,9 +2,8 @@ import traceback
 
 REQUIRED_FIELDS = ['user_name', 'wish_id']
 
-def WishNotFoundError(Exception):
-	def __init__(self, wish_id):
-		super(WishNotFoundError, self).__init__('wish {0} was not found'.format(wish_id))
+class WishNotFoundError(Exception):
+	pass
 
 def main(db, request, consts):
 	try:
@@ -16,13 +15,13 @@ def main(db, request, consts):
 				break
 
 		if not wish_found:
-			for wish in user._created_wishes:
-				if str(wish) == request['wish_id']:
+			for wish in user._read_wishes:
+				if str(wish['wish_id']) == request['wish_id']:
 					wish_found = True
 					break
 
 		if not wish_found:
-			raise WishNotFoundError(request['wish_id'])
+			raise WishNotFoundError('wish {0} was not found'.format(request['wish_id']))
 
 		wish = db.load_wish(request['wish_id'])
 		return {

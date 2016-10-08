@@ -45,7 +45,7 @@ def main(db, request, consts):
 			message = traceback.format_exc()
 		return {
 			'success' : False,
-			'message' : traceback.message
+			'message' : message
 		}
 
 
