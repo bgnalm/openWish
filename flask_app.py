@@ -11,6 +11,7 @@ import read_wish.read_wish as read_wish
 import get_wishes.get_wishes as get_wishes
 import get_wish.get_wish as get_wish
 import rate_wish.rate_wish as rate_wish
+import send_bug.send_bug as send_bug
 
 import consts
 import request_handler
@@ -91,6 +92,11 @@ def route_get_wish():
 def route_rate_wish():
     return process_json_api_call(rate_wish)
 
+@app.route("/sendBug", methods=['POST', 'GET'])
+@app.route("/send_bug", methods=['POST', 'GET'])
+def route_send_bug():
+    return process_json_api_call(send_bug)
+
 def main():
     try:
         os.chdir('./openWish')
@@ -99,7 +105,7 @@ def main():
 
     print 'started at {0}'.format(time.asctime())
     app.debug = True
-    app.run()
+    app.run(host='0.0.0.0')
     print 'ended at {0}'.format(time.asctime())
 
 

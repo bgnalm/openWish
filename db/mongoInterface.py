@@ -100,6 +100,7 @@ class MongoInterface(DB.DBInterface):
 		self._db = MongoClient(MONGO_URI)[DB_NAME]
 		self._wishes = self._db['wishes']
 		self._users = self._db['users']
+		self._bugs = self._db['bugs']
 
 	def load_user(self, user_name):
 		if not self._user_exists(user_name):
@@ -236,6 +237,16 @@ class MongoInterface(DB.DBInterface):
 				 '$inc' : {'rating' : rating-initial_rating},	
 				}
 			)
+
+	def add_bug(self, bug, username, time_added):
+		insertion = {
+			'text' : bug,
+			'time_added' : time_added,
+			'user_name' : username
+		}
+
+		self._bugs.insert(insertion)
+
 
 
 
