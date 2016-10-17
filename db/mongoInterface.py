@@ -195,8 +195,9 @@ class MongoInterface(DB.DBInterface):
 		"""
 
 		read_wishes = self._users.find({'name':reader_user_name}).limit(1).next()['read_wishes']
+		read_wishes_id = [wish['wish_id'] for wish in read_wishes]
 		created_wishes = self._users.find({'name':reader_user_name}).limit(1).next()['created_wishes']
-		excluded_wishes = read_wishes + created_wishes
+		excluded_wishes = read_wishes_id + created_wishes
 		excluded_wishes_id = [ObjectId(wish) for wish in excluded_wishes]
 		wish = self._wishes.find({'_id':{'$nin':excluded_wishes_id}}).limit(1).next()
 		if add_to_read_wishes:
