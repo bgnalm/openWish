@@ -1,5 +1,7 @@
 import time
 
+LOCAL_SERVER = True
+
 MINIMUM_RATING = 1
 MAXIMUM_RATING = 5
 USER_DIDNT_RATE_YET = -1
@@ -10,6 +12,12 @@ ZERO_NEXT_POST_TIME = True # always allow to post, for debugging purposes
 
 FULL_TRACEBACK_MESSAGE = True # should return full traceback in error messages
 
+MONGODB_LOCAL_URI = '10.20.109.89'
+MONGODB_MLAB_URL = 'mongodb://bgnalm:130495ml@ds031193.mlab.com:31193/openwish'
+DB_NAME = 'openwish'
+MONGODB_URI = MONGODB_MLAB_URL
+if LOCAL_SERVER:
+	MONGODB_URI = MONGODB_LOCAL_URI
 
 class Wish(object):
 
