@@ -105,7 +105,8 @@ def main():
 
     print 'started at {0}'.format(time.asctime())
     app.debug = True
-    app.run(host='0.0.0.0')
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
     print 'ended at {0}'.format(time.asctime())
 
 
