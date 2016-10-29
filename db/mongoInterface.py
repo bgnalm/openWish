@@ -5,6 +5,7 @@ import time
 import consts
 
 MONGO_URI = '10.20.109.89'
+MONGO_MLAB = 'mongodb://bgnalm:130495ml@ds031193.mlab.com:31193/openwish'
 DB_NAME = 'openWish'
 
 class UserExistsError(Exception):
@@ -97,7 +98,8 @@ class MongoInterface(DB.DBInterface):
 
 
 	def __init__(self):
-		self._db = MongoClient(MONGO_URI)[DB_NAME]
+		#self._db = MongoClient(MONGO_URI)[DB_NAME]
+		self._db = MongoClient(MONGO_MLAB)
 		self._wishes = self._db['wishes']
 		self._users = self._db['users']
 		self._bugs = self._db['bugs']
