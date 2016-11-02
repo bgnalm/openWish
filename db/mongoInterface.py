@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 import time
 import consts
+import random
 
 MONGO_URI = '10.20.109.89'
 MONGO_MLAB = 'mongodb://OpenWishAdmin:OpenWish@ds031193.mlab.com:31193/openwish'
@@ -201,7 +202,10 @@ class MongoInterface(DB.DBInterface):
 		created_wishes = self._users.find({'name':reader_user_name}).limit(1).next()['created_wishes']
 		excluded_wishes = read_wishes_id + created_wishes
 		excluded_wishes_id = [ObjectId(wish) for wish in excluded_wishes]
-		wish = self._wishes.find({'_id':{'$nin':excluded_wishes_id}}).limit(1).next()
+		wishes = self._wishes.find({'_id':{'$nin':excluded_wishes_id}})
+		wish_number = random.randint(0, wishes.count()-1)
+		wishes.skip(wish_number)
+		wish = wishes.next()
 		if add_to_read_wishes:
 			self._add_read_wish_to_user(reader_user_name, ObjectId(wish['_id']))
 

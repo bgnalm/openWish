@@ -18,6 +18,7 @@ DB_NAME = 'openwish'
 MONGODB_URI = MONGODB_MLAB_URL
 if LOCAL_SERVER:
 	MONGODB_URI = MONGODB_LOCAL_URI
+	DB_NAME = 'openWish'
 
 class Wish(object):
 
