@@ -151,6 +151,7 @@ class MongoInterface(DB.DBInterface):
 			result['number_of_reads'],
 			result['rating'],
 			result['number_of_ratings'],
+			result['disabled'],
 			result['time_added'],
 			result['optional'],
 		)
@@ -193,7 +194,8 @@ class MongoInterface(DB.DBInterface):
 			'starred' : 0,
 			'number_of_reads' : 0,
 			'rating' : 0,
-			'number_of_ratings' : 0
+			'number_of_ratings' : 0,
+			'disabled' : False
 		}
 
 		if not self._user_exists(wish._user_name):
