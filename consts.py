@@ -24,7 +24,7 @@ class Wish(object):
 
 	def __init__(self, text, user_name, wish_id='', read_by=[], number_of_reads=0,
 		rating=0, number_of_ratings=0, time_added=None, optional=None):
-		self._text= text
+		self._text = text
 		self._wish_id = wish_id
 		self._user_name = user_name
 		self._time_added = time_added
