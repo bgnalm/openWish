@@ -246,7 +246,14 @@ class MongoInterface(DB.DBInterface):
 			if read_wish['wish_id'] == wish_object:
 				initial_rating = read_wish['rating']
 
-		self._users.update({'name' : user_name, 'read_wishes.wish_id': wish_object}, {'$set' :{'read_wishes.$.rating' : rating}})
+		self._users.update(
+			{'name' : user_name, 'read_wishes.wish_id': wish_object}, 
+			{
+				'$set' : {'read_wishes.$.rating' : rating},
+				'$inc' : {'reads_left' : consts.RATE_WISH_READS_VALUE}
+			}
+		)
+
 		if initial_rating == consts.USER_DIDNT_RATE_YET:
 			self._wishes.update(
 				{'_id' : wish_object},
