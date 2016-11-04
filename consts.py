@@ -13,6 +13,7 @@ ZERO_NEXT_POST_TIME = True # always allow to post, for debugging purposes
 FULL_TRACEBACK_MESSAGE = True # should return full traceback in error messages
 
 INITIAL_READS_LEFT = 3
+NEW_WISH_READS_VALUE = 10 # how many reads does the user get from posting a new wish
 
 MONGODB_LOCAL_URI = '10.20.109.89'
 MONGODB_MLAB_URL = 'mongodb://OpenWishAdmin:OpenWish@ds031193.mlab.com:31193/openwish'

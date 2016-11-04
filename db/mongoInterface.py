@@ -73,10 +73,21 @@ class MongoInterface(DB.DBInterface):
 			}
 		)
 
+	def _update_user_after_new_wish(self, user_name, wish_id, post_time):
+		next_post_time = self._calculate_user_next_post_time(user_name)
+		self._users.update(
+			{'name':user_name},
+			{
+				'$push': {'created_wishes':wish_id}, '$inc' : {'posts' : 1},
+				'$set' : {
+					'last_post_timestamp' : post_time,
+					'next_post_timestamp' : int(next_post_time)
+				},
+				'$inc' : {'reads_left' : consts.NEW_WISH_READS_VALUE}
+			}
+		)
+
 	def _add_read_wish_to_user(self, user_name, wish_id):
-		print user_name
-		print wish_id
-		
 		self._users.update(
 			{'name':user_name},
 			{
@@ -189,8 +200,7 @@ class MongoInterface(DB.DBInterface):
 			raise UserDoesNotExistsError('User {0} does not exists'.format(wish._user_name))
 
 		_id = self._wishes.insert(insertion)
-		self._add_created_wish_to_user(wish._user_name, _id)
-		self._update_user_post_data(wish._user_name, wish._time_added)
+		self._update_user_after_new_wish(wish._user_name, _id, wish._time_added)
 		return _id
 
 	def get_random_wish(
