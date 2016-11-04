@@ -12,6 +12,8 @@ ZERO_NEXT_POST_TIME = True # always allow to post, for debugging purposes
 
 FULL_TRACEBACK_MESSAGE = True # should return full traceback in error messages
 
+INITIAL_READS_LEFT = 3
+
 MONGODB_LOCAL_URI = '10.20.109.89'
 MONGODB_MLAB_URL = 'mongodb://OpenWishAdmin:OpenWish@ds031193.mlab.com:31193/openwish'
 DB_NAME = 'openwish'
@@ -22,7 +24,7 @@ if LOCAL_SERVER:
 
 class Wish(object):
 
-	def __init__(self, text, user_name, wish_id='', read_by=[], number_of_reads=0,
+	def __init__(self, text, user_name, wish_id='', read_by=[], starred=0, number_of_reads=0,
 		rating=0, number_of_ratings=0, time_added=None, optional=None):
 		self._text = text
 		self._wish_id = wish_id
@@ -30,6 +32,7 @@ class Wish(object):
 		self._time_added = time_added
 		self._read_by = read_by
 		self._number_of_reads = number_of_reads
+		self._starred = starred
 		self._rating = rating
 		self._number_of_ratings = number_of_ratings
 		if time_added is None:
@@ -57,11 +60,15 @@ class Wish(object):
 
 class User(object):
 
-	def __init__(self, name, created_wishes, read_wishes, posts, reads, last_post_timestamp, next_post_timestamp):
+	def __init__(self, name, created_wishes, read_wishes, starred_wishes, last_read_wish, reads_left, posts, reads, last_post_timestamp, next_post_timestamp):
 		self._name = name
 		self._created_wishes = created_wishes
 		self._read_wishes = read_wishes
+		self._starred_wishes = starred_wishes
+		self._last_read_wish = last_read_wish
+		self._reads_left = reads_left
 		self._posts = posts
 		self._reads = reads
 		self._last_post_timestamp = last_post_timestamp
 		self._next_post_timestamp = next_post_timestamp
+		
