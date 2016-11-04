@@ -1,6 +1,6 @@
 import time
 
-LOCAL_SERVER = False
+LOCAL_SERVER = True
 
 MINIMUM_RATING = 1
 MAXIMUM_RATING = 5
