@@ -73,6 +73,26 @@ def get_wish(username, wish_id):
 	r = requests.post(url, data=json.dumps(data), headers=HEADERS)
 	return r.json()
 
+def star_wish(username, wish_id, star_wish):
+	url = SERVER_ADDRESS + '/star_wish'
+	data = {
+		'user_name' : username,
+		'wish_id' : wish_id,
+		'starred' : star_wish
+	}
+
+	r = requests.post(url, data=json.dumps(data), headers=HEADERS)
+	return r.json()
+
+def get_permissions(username):
+	url = SERVER_ADDRESS + '/get_permissions'
+	data = {
+		'user_name' : username,
+	}
+
+	r = requests.post(url, data=json.dumps(data), headers=HEADERS)
+	return r.json()
+
 
 def debug_print(s):
 	message = time.ctime() + ': ' + s

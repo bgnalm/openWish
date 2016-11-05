@@ -18,6 +18,9 @@ class UserDoesNotExistsError(Exception):
 class UserCantRateWish(Exception):
 	pass
 
+class UserCantStarWish(Exception):
+	pass
+
 class MongoInterface(DB.DBInterface):
 
 	def _add_created_wish_to_user(self, user_name, wish_id):
@@ -125,7 +128,6 @@ class MongoInterface(DB.DBInterface):
 			user_name,
 			result['created_wishes'],
 			result['read_wishes'],
-			result['starred_wishes'],
 			result['last_read_wish'],
 			result['reads_left'],
 			result['posts'],
@@ -147,7 +149,6 @@ class MongoInterface(DB.DBInterface):
 			result['user_name'],
 			wish_id,
 			result['read_by'],
-			result['starred'],
 			result['number_of_reads'],
 			result['rating'],
 			result['number_of_ratings'],
@@ -171,7 +172,6 @@ class MongoInterface(DB.DBInterface):
 			'name' : name,
 			'created_wishes' : [],
 			'read_wishes' : [],
-			'starred_wishes' : [],
 			'last_read_wish' : None,
 			'reads_left' : consts.INITIAL_READS_LEFT,
 			'last_post_timestamp' : 0,
@@ -191,7 +191,6 @@ class MongoInterface(DB.DBInterface):
 			'user_name' :wish._user_name,
 			'optional': wish._optional,
 			'read_by' : [],
-			'starred' : 0,
 			'number_of_reads' : 0,
 			'rating' : 0,
 			'number_of_ratings' : 0,
@@ -271,6 +270,18 @@ class MongoInterface(DB.DBInterface):
 				 '$inc' : {'rating' : rating-initial_rating},	
 				}
 			)
+
+	def star_wish(self, user_name, wish_id, starred):
+		wish_object = ObjectId(wish_id)
+		result = self._users.update(
+			{'name' : user_name, 'read_wishes.wish_id': wish_object}, 
+			{
+				'$set' : {'read_wishes.$.starred' : starred},
+			}
+		)
+
+		if result.items()[0][1] == 0:
+			raise UserCantStarWish('user {0} has not read wish {1}'.format(user_name,wish_id))
 
 	def add_bug(self, bug, username, time_added):
 		insertion = {

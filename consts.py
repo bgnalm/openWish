@@ -26,7 +26,7 @@ if LOCAL_SERVER:
 
 class Wish(object):
 
-	def __init__(self, text, user_name, wish_id='', read_by=[], starred=0, number_of_reads=0,
+	def __init__(self, text, user_name, wish_id='', read_by=[], number_of_reads=0,
 		rating=0, number_of_ratings=0, disabled=False, time_added=None, optional=None):
 		self._text = text
 		self._wish_id = wish_id
@@ -34,7 +34,6 @@ class Wish(object):
 		self._time_added = time_added
 		self._read_by = read_by
 		self._number_of_reads = number_of_reads
-		self._starred = starred
 		self._rating = rating
 		self._number_of_ratings = number_of_ratings
 		self._disabled = disabled
@@ -63,11 +62,10 @@ class Wish(object):
 
 class User(object):
 
-	def __init__(self, name, created_wishes, read_wishes, starred_wishes, last_read_wish, reads_left, posts, reads, last_post_timestamp, next_post_timestamp):
+	def __init__(self, name, created_wishes, read_wishes, last_read_wish, reads_left, posts, reads, last_post_timestamp, next_post_timestamp):
 		self._name = name
 		self._created_wishes = created_wishes
 		self._read_wishes = read_wishes
-		self._starred_wishes = starred_wishes
 		self._last_read_wish = last_read_wish
 		self._reads_left = reads_left
 		self._posts = posts

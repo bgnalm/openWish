@@ -11,6 +11,8 @@ import read_wish.read_wish as read_wish
 import get_wishes.get_wishes as get_wishes
 import get_wish.get_wish as get_wish
 import rate_wish.rate_wish as rate_wish
+import star_wish.star_wish as star_wish
+import get_permissions.get_permissions as get_permissions
 import send_bug.send_bug as send_bug
 
 import consts
@@ -91,6 +93,17 @@ def route_get_wish():
 @app.route("/rate_wish", methods=['POST', 'GET'])
 def route_rate_wish():
     return process_json_api_call(rate_wish)
+
+@app.route("/starWish", methods=['POST', 'GET'])
+@app.route("/star_wish", methods=['POST', 'GET'])
+def route_star_wish():
+    return process_json_api_call(star_wish)
+
+@app.route("/get_permissions", methods=['POST', 'GET'])
+@app.route("/getPermissions", methods=['POST','GET'])
+def route_get_permissins():
+    return process_json_api_call(get_permissions)
+
 
 @app.route("/sendBug", methods=['POST', 'GET'])
 @app.route("/send_bug", methods=['POST', 'GET'])
