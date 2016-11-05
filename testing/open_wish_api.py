@@ -93,6 +93,19 @@ def get_permissions(username):
 	r = requests.post(url, data=json.dumps(data), headers=HEADERS)
 	return r.json()
 
+def get_read_wishes_extended(username, counter):
+	url = SERVER_ADDRESS + '/get_wishes_extended'
+	data = {
+		'user_name' : username,
+		'counter' : counter,
+		'read_wishes' : True,
+		'created_wishes' : False,
+		'starred_wishes' : False
+	}
+
+	r = requests.post(url, data=json.dumps(data), headers=HEADERS)
+	return r.json()
+
 
 def debug_print(s):
 	message = time.ctime() + ': ' + s

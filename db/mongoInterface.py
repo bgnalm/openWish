@@ -283,6 +283,54 @@ class MongoInterface(DB.DBInterface):
 		if result.items()[0][1] == 0:
 			raise UserCantStarWish('user {0} has not read wish {1}'.format(user_name,wish_id))
 
+	def get_read_wishes_extended(self, username, counter, read_wishes, created_wishes, starred_wishes):
+		if not self._user_exists(username):
+			raise UserDoesNotExistsError('User {0} does not exist'.format(username))
+
+		read_wishes_batch_size = 0
+		created_wishes_batch_size = 0
+		starred_wishes_batch_size = 0
+		if read_wishes:
+			read_wishes_batch_size = consts.GET_WISHES_BATCH_SIZE
+		if created_wishes:
+			created_wishes_batch_size = consts.GET_WISHES_BATCH_SIZE
+		if starred_wishes:
+			starred_wishes_batch_size = consts.GET_WISHES_BATCH_SIZE
+
+		read_wishes_data = []
+		created_wishes_data = []
+		starred_wishes_data = []
+
+		if read_wishes or created_wishes:
+			result = self._users.find(
+				{'name' : username},
+				{
+					'read_wishes' : {'$slice' : [counter, read_wishes_batch_size]},
+					'created_wishes' : {'$slice' : [counter, created_wishes_batch_size]},
+				}
+			).next()
+
+			created_wishes_data = self._get_wishes_data(result['created_wishes'])
+			read_wishes_id = [wish['_id'] for wish in result['read_wishes']]
+			read_wishes_data = self._get_wishes_data(read_wishes_id)
+
+		if starred_wishes:
+			result = self._users.find(
+				{'name': username},
+				{
+					'created_wishes' : {'$slice' : 0},
+					'read_wishes' : {
+						'$elemMatch' : {'starred' : True},
+						'$slice' : [counter, starred_wishes_batch_size] 
+					}
+
+				}
+			).next()
+			starred_wishes_id = [wish['_id'] for wish in result['read_wishes']]
+			starred_wishes_data = self._get_wishes_data(starred_wishes_id)
+
+		return {}
+
 	def add_bug(self, bug, username, time_added):
 		insertion = {
 			'text' : bug,
