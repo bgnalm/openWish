@@ -111,6 +111,32 @@ class MongoInterface(DB.DBInterface):
 
 		return False
 
+	def _get_wishes_data(self, wishes):
+		"""
+		@brief: gets a list of wishes
+		"""
+
+		data = []
+		result = self._wishes.find(
+			{'id': {'$in' : wishes}}
+		)
+
+		for wish in result:
+			w = consts.Wish(
+				wish['text'],
+				wish['וuser_name'],
+				wish['_id'],
+				None,
+				wish['number_of_reads'],
+				wish['rating'],
+				wish['number_of_ratings'],
+				wish['disabled'],
+				wish['time_added'],
+				wish['optional']
+			)
+			data.append(w.get_public_wish())
+
+		return data
 
 	def __init__(self):
 		#self._db = MongoClient(MONGO_URI)[DB_NAME]
@@ -283,7 +309,7 @@ class MongoInterface(DB.DBInterface):
 		if result.items()[0][1] == 0:
 			raise UserCantStarWish('user {0} has not read wish {1}'.format(user_name,wish_id))
 
-	def get_read_wishes_extended(self, username, counter, read_wishes, created_wishes, starred_wishes):
+	def get_batch_wishes(self, username, counter, read_wishes, created_wishes, starred_wishes):
 		if not self._user_exists(username):
 			raise UserDoesNotExistsError('User {0} does not exist'.format(username))
 
@@ -329,7 +355,11 @@ class MongoInterface(DB.DBInterface):
 			starred_wishes_id = [wish['_id'] for wish in result['read_wishes']]
 			starred_wishes_data = self._get_wishes_data(starred_wishes_id)
 
-		return {}
+		return {
+			'read_wishes': read_wishes_data,
+			'created_wishes' : created_wishes_data,
+			'starred_wishes' : starred_wishes_data
+		}
 
 	def add_bug(self, bug, username, time_added):
 		insertion = {
