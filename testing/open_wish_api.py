@@ -93,8 +93,8 @@ def get_permissions(username):
 	r = requests.post(url, data=json.dumps(data), headers=HEADERS)
 	return r.json()
 
-def get_btach_wishes(username, read_wishes, created_wishes, starred_wihes, counter):
-	url = SERVER_ADDRESS + '/get_wishes_extended'
+def get_batch_wishes(username, read_wishes, created_wishes, starred_wishes, counter):
+	url = SERVER_ADDRESS + '/get_batch_wishes'
 	data = {
 		'user_name' : username,
 		'counter' : counter,

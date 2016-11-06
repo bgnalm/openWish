@@ -13,7 +13,7 @@ import get_wish.get_wish as get_wish
 import rate_wish.rate_wish as rate_wish
 import star_wish.star_wish as star_wish
 import get_permissions.get_permissions as get_permissions
-import get_wishes_extended.get_wishes_extended as get_wishes_extended
+import get_batch_wishes.get_batch_wishes as get_batch_wishes
 import send_bug.send_bug as send_bug
 
 import consts
@@ -105,10 +105,10 @@ def route_star_wish():
 def route_get_permissins():
     return process_json_api_call(get_permissions)
 
-@app.route("/get_wishes_extended", methods=['POST', 'GET'])
-@app.route("/getWishesExtended", methods=['POST','GET'])
+@app.route("/get_batch_wishes", methods=['POST', 'GET'])
+@app.route("/getBatchWishes", methods=['POST','GET'])
 def route_get_wishes_extended():
-    return process_json_api_call(get_wishes_extended)
+    return process_json_api_call(get_batch_wishes)
 
 
 
