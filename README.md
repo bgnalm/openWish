@@ -34,9 +34,7 @@ To do so, you can do the following:
 
 1. Improve the [core server](https://github.com/bgnalm/openWish)
 
-2. Improve the the OpenWish client android app (the development hasn't started yet)
-
-3. Create your own OpenWish client (Check the **API Documentation** page)
+2. Create your own OpenWish client (Check the **API Documentation** page)
 
 
 
@@ -73,14 +71,12 @@ There are two limitations:
 
 
 
-1. Wish Reading - A user can only read as many wishes as s/he has added
-
-This is meant to encourage wish adding
-
-2. Wish Adding - A user's abillity to add wishes is limited by the ratings he receives on his wishes
-
+1. Wish Adding - A user's abillity to add wishes is limited by the ratings he receives on his wishes - 
 This is meant to limit spam wishes
 
+
+2. Wish Reading - A user is limited by how many wishes he can read, as a function of how many wish he as added and rated. - 
+This is meant to encourage wish adding
 
 
 ## How it will be implemented in the android app
@@ -97,6 +93,23 @@ and won't used as an analytics tool
 
 
 #api
+
+## General Description:
+
+The OpenWish API works with JSON. 
+All API calls are returned with the same structure
+
+```
+{
+	"success" :   true or false,
+	"message" : "success" or error message
+	"data" : {
+		All data retrived by the call will be here
+	}
+}
+
+```
+
 
 ## Create User
 
