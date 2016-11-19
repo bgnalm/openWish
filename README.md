@@ -150,16 +150,11 @@ response:
 ```
 {
 	"message" : "success",
-
 	"data" : {
-
 		"user_id" : "57eeab86ad775f586cd"
-
 	},
-
 	"success" : true
 }
-
 ```
 
 
@@ -205,24 +200,17 @@ Optional Fields:
 example request:
 
 ```
-{	"user_name" : "JohnDoe123",
-
+{	
+	"user_name" : "JohnDoe123",
 	"wish" : {
-
 		"text" : "I wish i could know where traffic jams are going to be",
-
 		"optional" : {
-
 			"city" : "London",
-
 			"recurring" : true,
-
 			"age" : 30
-
 		}
 	}
 }
-
 ```
 
 
@@ -231,18 +219,12 @@ response:
 
 ```
 {
-
 	"message" : "success",
-
 	"data" : {
-
 		"wish_id" : "57eeab86775f586cd"
-
 	},
-
 	"success" : true
 }
-
 ```
 
 
@@ -290,12 +272,9 @@ example request:
 ```
 {
 	"user_name" : "JohnDoe123",
-
 	"created_wishes" : true,
-
 	"read_wishes" : true
 }
-
 ```
 
 
@@ -303,31 +282,19 @@ example request:
 response:
 
 ```
-
 {
 	"message" : "success",
-
 	"data" : {
-
 		"created_wishes" : [
-
 			"11292523abcde",
-
 			"6756b76abbcef123"
-
 		],
-
 		"read_wishes" : [
-
 			"2234234234bdd"
-
 		]
-
 	},
-
 	"success" : true
 }
-
 ```
 
 
@@ -377,7 +344,6 @@ example request:
 ```
 {
 	"user_name" : "JohnDoe123",
-
 	"wish_id" : "364929ed87c807a8079f"
 }
 ```
@@ -389,30 +355,18 @@ response:
 ```
 {
 	"message" : "success",
-
 	"data" : {
-
 		"text" : "I wish there were more clocks",
-
 		"time_added" : 1474535225234.
-
 		"user_name" : "DoeJohn321",
-
 		"rating" : 1.1,
-
 		"number_of_reads" : 52,
-
 		"optional" : {
-
 			"coountry" : "France"
-
 		}
-
 	},
-
 	"success" : true
 }
-
 ```
 
 
@@ -447,9 +401,7 @@ example request:
 ```
 {
 	"user_name" : "JohnDoe123",
-
 	"wish_id" : "1133223523b234d",
-
 	"rating" : 4.1
 }
 ```
@@ -460,9 +412,7 @@ response:
 
 ```
 {
-
 	"message" : "success",	
-
 	"success" : true
 }
 ```
@@ -519,26 +469,60 @@ response:
 ```
 {
 	"message" : "success",
-
 	"data" : {
-
 		"text" : "I wish there were more clocks",
-
 		"time_added" : 1474535225234.
-
 		"user_name" : "DoeJohn321",
-
 		"rating" : 1.1,
-
 		"number_of_reads" : 52,
-
 		"optiona" : {
-
 			"coountry" : "France"
-
 		}
 	},
+	"success" : true
+}
+```
 
+
+## Star Wish
+
+Sets the *starred* status of a wish. If set to true, this enables wishes to be retrived easier in later uses.
+
+accessible with */star_wish* path
+
+
+
+### Description
+
+Required Fields:
+
+
+
+1. user_name : the user the is adding the wish
+2. wish_id: the id of the wish to change
+3. starred : true/false. Sets the starred status of the wish
+
+
+
+### example
+
+example request:
+
+```
+{
+	"user_name" : "JohnDoe123",
+	"wish_id" : "581e274279eae04568444b7e",
+	"starred" : true
+}
+```
+
+
+
+response:
+
+```
+{
+	"message" : "success",
 	"success" : true
 }
 ```
@@ -581,20 +565,149 @@ response:
 
 ```
 {
-
 	"message" : "success",
-
 	"data" : {
-
 		"can_read" : true,
-
 		"can_post" : false,
-
 		"next_post" : 34 (Seconds!)
 	},
 	"success" : true
 }
 ```
+
+
+## Get Permissions
+
+Gets what actions can the user do. 
+
+accessible with */get_permissions* path
+
+
+### Description
+
+Required Fields:
+
+
+1. user_name : the user the is adding the wish
+
+
+
+### example
+
+example request:
+
+```
+{
+	"user_name" : "JohnDoe123",
+	"wish_id" : "581e274279eae04568444b7e",
+	"starred" : true
+}
+```
+
+
+response:
+
+```
+{
+  "message": "success",
+  "data": {
+    "can_read": true,
+    "can_post": true,
+    "next_post": "Thu Jan 01 02:00:00 1970",
+    "reads_left": 83
+  },
+  "success": true
+}
+```
+
+
+## Get Batch Wishes
+
+Returns a batch of wishes.
+
+accessible with */get_batch_wishes* path
+
+
+
+### Description
+
+Required Fields:
+
+1. user_name : the user the is adding the wish
+2. read_wishes : true/false. Specifies if read wishes shouold be fetched
+3. created_wishes : true/false. Specifies if created wishes shouold be fetched
+4. starred_wishes : true/false. Specifies if starred wishes shouold be fetched
+5. counter: from where to start fetching. (details explained later)
+
+
+This call is made for fetching wishes iterativley.
+For example if a user scrolls through his created wishes, this call should be made repeatley. 
+
+The counter argument is meant to specify the server from which point it should return wishes.
+
+
+### example
+
+example request:
+
+```
+{
+	"user_name" : "JohnDoe123",
+	"read_wishes" : false,
+	"created_wushes" : true,
+	"starred_wishes" : false,
+	"counter" : 0
+}
+```
+
+Will ask for the first read wishes
+
+
+
+response:
+
+```
+{
+  "message": "success",
+  "data": {
+    "starred_wishes": [],
+    "created_wishes": [
+      {
+        "wish_id": "581e274479eae04568444b83",
+        "rating": 1,
+        "text": "I have a dream that one day this nation will rise up and live out the true meaning of its creed: We hold these truths to be self-evident, that all men are created equal.",
+        "optional": {},
+        "time_added": 1478371140,
+        "number_of_reads": 34
+      },
+      {
+        "wish_id": "581e274579eae04568444b84",
+        "rating": 1,
+        "text": "test",
+        "optional": {},
+        "time_added": 1478371141,
+        "number_of_reads": 0
+      },
+      {
+        "wish_id": "581e274579eae04568444b85",
+        "rating": 1,
+        "text": "test",
+        "optional": {},
+        "time_added": 1478371141,
+        "number_of_reads": 0
+      }
+    ],
+    "read_wishes": []
+  },
+  "success": true
+}
+```
+
+To use this call to get all wishes, the following loop should be used:
+1. set counter=0
+1. call get_batch_wishes with counter
+2. set counter += length of result
+3. jump to 2
 
 
 
