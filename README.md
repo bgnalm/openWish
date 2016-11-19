@@ -530,9 +530,12 @@ response:
 
 ## Time Left - Deprecated
 
-----
+---
+
 This call is now deprecated. Please use Get Permissions instead
-----
+
+---
+
 
 
 Gets in how much time the user will be able to do stuff
