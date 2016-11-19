@@ -136,14 +136,10 @@ Required Fields:
 example request:
 
 ```
-
 {
-
 	"user_name" : "JohnDoe123",
 
 }
-
-
 
 ```
 
@@ -152,9 +148,7 @@ example request:
 response:
 
 ```
-
 {
-
 	"message" : "success",
 
 	"data" : {
@@ -164,7 +158,6 @@ response:
 	},
 
 	"success" : true
-
 }
 
 ```
@@ -199,7 +192,6 @@ Required Fields:
 
 
 
-
 Optional Fields:
 
 
@@ -213,10 +205,7 @@ Optional Fields:
 example request:
 
 ```
-
-{
-
-	"user_name" : "JohnDoe123",
+{	"user_name" : "JohnDoe123",
 
 	"wish" : {
 
@@ -231,12 +220,8 @@ example request:
 			"age" : 30
 
 		}
-
 	}
-
 }
-
-
 
 ```
 
@@ -245,7 +230,6 @@ example request:
 response:
 
 ```
-
 {
 
 	"message" : "success",
@@ -257,14 +241,16 @@ response:
 	},
 
 	"success" : true
-
 }
 
 ```
 
 
-## Get Wishes
+## Get Wishes - Deprecated. 
 
+----
+This call is now deprecated. Use Get Batch Wishes instead
+----
 
 
 retrives all the wishes the user can get
@@ -302,18 +288,13 @@ if none of these are specified, both are assumed true
 example request:
 
 ```
-
 {
-
 	"user_name" : "JohnDoe123",
 
 	"created_wishes" : true,
 
 	"read_wishes" : true
-
 }
-
-
 
 ```
 
@@ -324,7 +305,6 @@ response:
 ```
 
 {
-
 	"message" : "success",
 
 	"data" : {
@@ -346,7 +326,6 @@ response:
 	},
 
 	"success" : true
-
 }
 
 ```
@@ -363,7 +342,6 @@ accessible with */get_wish* path
 
 
 This call is only for getting wishes that are already accessible to the user
-
 
 
 i.e wishes that were read by the user or created by the user
@@ -397,17 +375,11 @@ the response data field will contain the information about the wish
 example request:
 
 ```
-
 {
-
 	"user_name" : "JohnDoe123",
 
 	"wish_id" : "364929ed87c807a8079f"
-
 }
-
-
-
 ```
 
 
@@ -415,9 +387,7 @@ example request:
 response:
 
 ```
-
 {
-
 	"message" : "success",
 
 	"data" : {
@@ -432,7 +402,7 @@ response:
 
 		"number_of_reads" : 52,
 
-		"optiona" : {
+		"optional" : {
 
 			"coountry" : "France"
 
@@ -441,7 +411,6 @@ response:
 	},
 
 	"success" : true
-
 }
 
 ```
@@ -476,19 +445,13 @@ Required Fields:
 example request:
 
 ```
-
 {
-
 	"user_name" : "JohnDoe123",
 
 	"wish_id" : "1133223523b234d",
 
 	"rating" : 4.1
-
 }
-
-
-
 ```
 
 
@@ -496,15 +459,12 @@ example request:
 response:
 
 ```
-
 {
 
 	"message" : "success",	
 
 	"success" : true
-
 }
-
 ```
 
 
@@ -542,24 +502,14 @@ Optional Fields:
 
 
 
-if none of these are specified, both are assumed true
-
-
-
 ### example
 
 example request:
 
 ```
-
 {
-
 	"user_name" : "JohnDoe123",
-
 }
-
-
-
 ```
 
 
@@ -567,13 +517,7 @@ example request:
 response:
 
 ```
-
 {
-
-	"message" : "success",
-
-	{
-
 	"message" : "success",
 
 	"data" : {
@@ -593,22 +537,18 @@ response:
 			"coountry" : "France"
 
 		}
-
 	},
 
 	"success" : true
-
 }
-
-	"success" : true
-
-}
-
 ```
 
 
-## Time Left
+## Time Left - Deprecated
 
+----
+This call is now deprecated. Please use Get Permissions instead
+----
 
 
 Gets in how much time the user will be able to do stuff
@@ -630,15 +570,9 @@ Required Fields:
 example request:
 
 ```
-
 {
-
 	"user_name" : "JohnDoe123",
-
 }
-
-
-
 ```
 
 
@@ -646,7 +580,6 @@ example request:
 response:
 
 ```
-
 {
 
 	"message" : "success",
@@ -658,12 +591,11 @@ response:
 		"can_post" : false,
 
 		"next_post" : 34 (Seconds!)
-
 	},
-
 	"success" : true
-
 }
-
 ```
+
+
+
 
