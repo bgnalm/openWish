@@ -92,7 +92,7 @@ he'll receive a wish - so the app will have a short "reward loop" from adding wi
 and won't used as an analytics tool
 
 
-#api
+#API
 
 ## General Description:
 
